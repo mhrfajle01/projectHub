@@ -1,0 +1,150 @@
+:root {
+  --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--bs-font-sans-serif);
+  /* Colorful Gradient Background */
+  background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 20%, #E0C3FC 40%, #8EC5FC 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  transition: background 0.3s ease;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  /* Modern Deep Space Gradient */
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
+  color: #e0e0e0;
+}
+
+/* Force dark mode background on the root element too just in case */
+body.dark-mode #root {
+  background: transparent;
+}
+
+/* Specific component overrides for Dark Mode */
+body.dark-mode .glass-card {
+  background: rgba(22, 33, 62, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #e0e0e0;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .glass-navbar {
+  background: rgba(26, 26, 46, 0.85) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Text Overrides - Using more specific selectors to win specificity wars */
+body.dark-mode .text-dark,
+body.dark-mode .text-black, 
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode h5, 
+body.dark-mode h6 {
+  color: #ffffff !important;
+}
+
+body.dark-mode .text-muted {
+  color: #a0a0a0 !important;
+}
+
+body.dark-mode .text-secondary {
+  color: #b0b0b0 !important;
+}
+
+body.dark-mode .text-primary {
+  color: #4db8ff !important;
+}
+
+/* Ensure markdown content is readable */
+body.dark-mode .project-card p, 
+body.dark-mode .project-card li,
+body.dark-mode .project-card span {
+  color: #dcdcdc !important;
+}
+
+/* Dark Mode Form Elements */
+body.dark-mode .form-control,
+body.dark-mode .form-select,
+body.dark-mode .input-group-text {
+  background-color: rgba(22, 33, 62, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #e0e0e0 !important;
+}
+
+body.dark-mode .form-control::placeholder {
+  color: #888 !important;
+}
+
+body.dark-mode .form-control:focus,
+body.dark-mode .form-select:focus {
+  background-color: rgba(22, 33, 62, 1) !important;
+  border-color: #4db8ff !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 0.25rem rgba(77, 184, 255, 0.25) !important;
+}
+
+/* Dropdown Options */
+body.dark-mode option {
+  background-color: #16213e;
+  color: white;
+}
+
+/* Modal specific fixes for dark mode */
+body.dark-mode .modal-content {
+  background-color: #1a1a2e;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  border-color: rgba(255,255,255,0.1);
+}
+
+body.dark-mode .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+/* Dark Mode Scrollbar Overrides */
+body.dark-mode ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: #30475e;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #4f6d7a;
+}
