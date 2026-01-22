@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/projectHub">
       <ThemeProvider>
         <AuthProvider>
           <div className="app-container min-vh-100">
