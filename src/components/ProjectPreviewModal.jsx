@@ -1,12 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, ButtonGroup, Dropdown } from 'react-bootstrap';
 
 export default function ProjectPreviewModal({ show, handleClose, project }) {
   const [viewMode, setViewMode] = useState('desktop'); // desktop, tablet, mobile
+  const [iframeLoading, setIframeLoading] = useState(true);
+  const [showScreenshot, setShowScreenshot] = useState(false);
+
+  useEffect(() => {
+    if (show) {
+      setShowScreenshot(false);
+      setIframeLoading(true);
+    }
+  }, [show, project]);
 
   if (!project) return null;
 
+  // Ensure URL has protocol
+  const getValidUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) return url;
+    return `https://${url}`;
+  };
+
+  const projectUrl = getValidUrl(project.url);
+
   const getWidth = () => {
+    if (showScreenshot) return '100%';
     switch (viewMode) {
       case 'mobile': return '375px';
       case 'tablet': return '768px';
@@ -20,7 +39,7 @@ export default function ProjectPreviewModal({ show, handleClose, project }) {
       onHide={handleClose} 
       size="xl" 
       centered 
-      fullscreen={viewMode === 'desktop' ? 'xl-down' : false}
+      fullscreen={viewMode === 'desktop' || showScreenshot ? 'xl-down' : false}
       contentClassName="glass-card overflow-hidden border-0 shadow-lg"
       dialogClassName="modal-90w"
     >
@@ -34,46 +53,60 @@ export default function ProjectPreviewModal({ show, handleClose, project }) {
         </div>
 
         {/* Device Toggles */}
-        <ButtonGroup size="sm" className="ms-3 bg-secondary bg-opacity-25 rounded p-1">
-          <Button 
-            variant={viewMode === 'desktop' ? 'light' : 'outline-light'} 
-            className="border-0 py-0 px-2"
-            onClick={() => setViewMode('desktop')}
-            title="Desktop View"
-          >
-            🖥️
-          </Button>
-          <Button 
-            variant={viewMode === 'tablet' ? 'light' : 'outline-light'} 
-            className="border-0 py-0 px-2"
-            onClick={() => setViewMode('tablet')}
-            title="Tablet View"
-          >
-            📱
-          </Button>
-          <Button 
-            variant={viewMode === 'mobile' ? 'light' : 'outline-light'} 
-            className="border-0 py-0 px-2"
-            onClick={() => setViewMode('mobile')}
-            title="Mobile View"
-          >
-            🤳
-          </Button>
-        </ButtonGroup>
+        {!showScreenshot && (
+            <ButtonGroup size="sm" className="ms-3 bg-secondary bg-opacity-25 rounded p-1">
+            <Button 
+                variant={viewMode === 'desktop' ? 'light' : 'outline-light'} 
+                className="border-0 py-0 px-2"
+                onClick={() => setViewMode('desktop')}
+                title="Desktop View"
+            >
+                🖥️
+            </Button>
+            <Button 
+                variant={viewMode === 'tablet' ? 'light' : 'outline-light'} 
+                className="border-0 py-0 px-2"
+                onClick={() => setViewMode('tablet')}
+                title="Tablet View"
+            >
+                📱
+            </Button>
+            <Button 
+                variant={viewMode === 'mobile' ? 'light' : 'outline-light'} 
+                className="border-0 py-0 px-2"
+                onClick={() => setViewMode('mobile')}
+                title="Mobile View"
+            >
+                🤳
+            </Button>
+            </ButtonGroup>
+        )}
 
         {/* Address Bar */}
         <div className="flex-grow-1 mx-3 d-none d-md-block">
           <div className="bg-secondary bg-opacity-25 rounded px-3 py-1 text-white text-opacity-50 text-truncate" style={{ fontSize: '0.8rem' }}>
-            {project.url}
+            {showScreenshot ? 'Viewing Project Screenshot' : projectUrl}
           </div>
         </div>
 
         {/* Actions */}
         <div className="ms-auto d-flex align-items-center gap-2 me-2">
+          {project.imageUrl && (
+             <Button 
+                variant={showScreenshot ? 'light' : 'outline-secondary'}
+                size="sm"
+                onClick={() => setShowScreenshot(!showScreenshot)}
+                className="me-2"
+                title="Toggle Screenshot"
+             >
+                {showScreenshot ? '🌐 Live Site' : '📷 Screenshot'}
+             </Button>
+          )}
+
           <Button 
             variant="primary" 
             size="sm" 
-            href={project.url} 
+            href={projectUrl} 
             target="_blank" 
             rel="noopener noreferrer"
             className="fw-bold px-3 border-0"
@@ -96,32 +129,43 @@ export default function ProjectPreviewModal({ show, handleClose, project }) {
             transition: 'width 0.3s ease'
           }}
         >
-          {/* Loading / Fallback Layer */}
-          <div className="position-absolute top-50 start-50 translate-middle text-muted text-center" style={{ zIndex: 0, width: '80%' }}>
-            <div className="spinner-border text-primary mb-3" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <h5 className="fw-bold text-dark">Connecting to Live Server...</h5>
-            <p className="small">If the site doesn't load within a few seconds, it may be blocking embedded previews for security.</p>
-            <Button 
-              variant="outline-primary" 
-              size="sm" 
-              href={project.url} 
-              target="_blank" 
-              className="mt-2"
-            >
-              Click here to Open Manually
-            </Button>
-          </div>
+          {showScreenshot && project.imageUrl ? (
+             <div className="w-100 h-100 d-flex justify-content-center align-items-center bg-dark">
+                <img 
+                    src={project.imageUrl} 
+                    alt={project.name} 
+                    style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} 
+                />
+             </div>
+          ) : (
+             <>
+                {/* Loading / Fallback Layer */}
+                <div className="position-absolute top-50 start-50 translate-middle text-muted text-center" style={{ zIndex: 0, width: '80%' }}>
+                    <div className={`spinner-border text-primary mb-3 ${!iframeLoading ? 'd-none' : ''}`} role="status">
+                    <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <h5 className="fw-bold text-dark">{iframeLoading ? 'Connecting to Live Server...' : 'Preview Loaded'}</h5>
+                    <p className="small mb-1">If the site is blank or refuses to connect, it is blocking embedded previews.</p>
+                    <p className="small text-danger fw-bold mb-2">Note: Logins often fail in previews due to browser security. Open externally to log in.</p>
+                </div>
 
-          <iframe 
-            src={project.url} 
-            title={project.name}
-            width="100%" 
-            height="100%" 
-            style={{ border: 'none', position: 'relative', zIndex: 1, backgroundColor: 'white' }}
-            allowFullScreen
-          />
+                <iframe 
+                    src={projectUrl} 
+                    title={project.name}
+                    width="100%" 
+                    height="100%" 
+                    onLoad={() => setIframeLoading(false)}
+                    style={{ 
+                    border: 'none', 
+                    position: 'relative', 
+                    zIndex: 1, 
+                    opacity: iframeLoading ? 0 : 1,
+                    transition: 'opacity 0.5s ease'
+                    }}
+                    allowFullScreen
+                />
+             </>
+          )}
         </div>
       </Modal.Body>
     </Modal>

@@ -3,7 +3,7 @@ import { Card, Button, Badge } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-export default function ProjectCard({ project, onDelete, onPreview, onPin }) {
+export default function ProjectCard({ project, onDelete, onPreview, onPin, onEdit }) {
   const formatDate = (timestamp) => {
     if (!timestamp) return '';
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
@@ -11,7 +11,17 @@ export default function ProjectCard({ project, onDelete, onPreview, onPin }) {
   };
 
   return (
-    <Card className={`h-100 glass-card project-card ${project.pinned ? 'border-primary border-2' : ''}`}>
+    <Card className={`h-100 glass-card project-card ${project.pinned ? 'border-primary border-2' : ''} overflow-hidden`}>
+      {project.imageUrl && (
+        <div style={{ height: '180px', overflow: 'hidden', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+          <Card.Img 
+            variant="top" 
+            src={project.imageUrl} 
+            alt={project.name} 
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        </div>
+      )}
       <Card.Body className="d-flex flex-column">
         <div className="d-flex justify-content-between align-items-start mb-2">
           <div className="d-flex flex-column w-75">
@@ -64,6 +74,14 @@ export default function ProjectCard({ project, onDelete, onPreview, onPin }) {
             style={{ background: 'linear-gradient(45deg, #4facfe 0%, #00f2fe 100%)' }}
           >
             Preview
+          </Button>
+          <Button 
+            variant="outline-primary" 
+            size="sm" 
+            onClick={() => onEdit(project)}
+            className="shadow-sm"
+          >
+            Edit
           </Button>
           <Button 
             variant="outline-danger" 

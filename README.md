@@ -1,16 +1,70 @@
-# React + Vite
+# ProjectHub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, React-based project management and portfolio dashboard. Built with Vite, Firebase, and React Bootstrap.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+-   **User Authentication**: Sign up and login securely via Firebase Auth.
+-   **Dashboard**: View all your projects with filtering (Category, Tech Stack) and sorting capabilities.
+-   **Project Management**: Add, Edit, and Delete projects.
+-   **Visual Portfolio**: Upload project screenshots and use Markdown for descriptions.
+-   **Responsive Design**: Fully responsive UI with a glassmorphism aesthetic and Dark Mode support.
 
-## React Compiler
+## Prerequisites
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+-   Node.js (v18+ recommended)
+-   npm or yarn
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url>
+    cd projectHub
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Environment Variables:**
+    Create a `.env` file in the root directory and add your Firebase configuration keys:
+    ```env
+    VITE_FIREBASE_API_KEY=your_api_key
+    VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+    VITE_FIREBASE_PROJECT_ID=your_project_id
+    VITE_FIREBASE_STORAGE_BUCKET=your_project_id.firebasestorage.app
+    VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+    VITE_FIREBASE_APP_ID=your_app_id
+    VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+    ```
+
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+
+## Build
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+## Deployment
+
+To deploy to GitHub Pages:
+
+```bash
+npm run deploy
+```
+
+## Technologies
+
+-   [React](https://reactjs.org/)
+-   [Vite](https://vitejs.dev/)
+-   [Firebase](https://firebase.google.com/) (Auth, Firestore, Storage)
+-   [React Bootstrap](https://react-bootstrap.github.io/)
+-   [React Router](https://reactrouter.com/)

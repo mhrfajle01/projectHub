@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { collection, query, where, onSnapshot, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import ProjectCard from './ProjectCard';
-import AddProjectModal from './AddProjectModal';
+import ProjectModal from './ProjectModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import ProjectPreviewModal from './ProjectPreviewModal';
 import { PROJECT_CATEGORIES, TECH_STACKS } from '../constants';
@@ -14,10 +14,11 @@ import { PROJECT_CATEGORIES, TECH_STACKS } from '../constants';
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
-  const [showAddModal, setShowAddModal] = useState(false);
+  const [showProjectModal, setShowProjectModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState(null);
+  const [projectToEdit, setProjectToEdit] = useState(null);
   const [projectToPreview, setProjectToPreview] = useState(null);
   
   // Feature State
@@ -103,6 +104,16 @@ export default function Dashboard() {
     }
   }
 
+  const handleAddClick = () => {
+    setProjectToEdit(null);
+    setShowProjectModal(true);
+  };
+
+  const handleEditClick = (project) => {
+    setProjectToEdit(project);
+    setShowProjectModal(true);
+  };
+
   const handleDeleteClick = (project) => {
     setProjectToDelete(project);
     setShowDeleteModal(true);
@@ -126,6 +137,11 @@ export default function Dashboard() {
       setShowDeleteModal(false);
       setProjectToDelete(null);
     }
+  };
+
+  const handleCloseProjectModal = () => {
+    setShowProjectModal(false);
+    setProjectToEdit(null);
   };
 
   return (
@@ -169,7 +185,7 @@ export default function Dashboard() {
               background: 'linear-gradient(45deg, #FF512F, #DD2476)', 
               fontWeight: '600'
             }} 
-            onClick={() => setShowAddModal(true)}
+            onClick={handleAddClick}
           >
             + Add Project
           </Button>
@@ -220,6 +236,7 @@ export default function Dashboard() {
                 onDelete={handleDeleteClick} 
                 onPreview={handlePreviewClick}
                 onPin={handlePinClick}
+                onEdit={handleEditClick}
               />
             </Col>
           ))}
@@ -234,9 +251,10 @@ export default function Dashboard() {
         </Row>
       </Container>
 
-      <AddProjectModal 
-        show={showAddModal} 
-        handleClose={() => setShowAddModal(false)} 
+      <ProjectModal 
+        show={showProjectModal} 
+        handleClose={handleCloseProjectModal} 
+        projectToEdit={projectToEdit}
       />
 
       <DeleteConfirmModal 
