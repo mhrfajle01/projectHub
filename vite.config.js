@@ -1,13 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
+// import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
+    /*
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      workbox: {
+        minify: false,
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+      },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'ProjectHub',
@@ -34,6 +42,11 @@ export default defineConfig({
         ]
       }
     })
+    */
   ],
+  build: {
+    minify: false,
+    chunkSizeWarningLimit: 2000,
+  },
   base: '/projectHub/',
 })
